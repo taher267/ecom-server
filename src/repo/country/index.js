@@ -1,34 +1,34 @@
-const { User } = require("../../models");
+const { Country } = require("../../models");
 
 const findAllItems = ({ qry = {}, select = "" }) => {
-  return User.find(qry).select(select).exec();
+  return Country.find(qry).select(select).exec();
 };
 
 const findItem = ({ qry = {}, select = "" }) => {
-  return User.findOne(qry).select(select).exec();
+  return Country.findOne(qry).select(select).exec();
 };
 const findItemById = ({ id, select = "" }) => {
-  return User.findById(id).select(select).exec();
+  return Country.findById(id).select(select).exec();
 };
 
 const updateItem = ({ qry = {}, updateDate = {}, options = {} }) => {
-  return User.updateOne(qry, updateDate, options);
+  return Country.updateOne(qry, updateDate);
 };
 
 const updateItemById = ({ id, updateDate = {}, options = {} }) => {
-  return User.findByIdAndUpdate(id, updateDate, options);
+  return Country.findByIdAndUpdate(id, updateDate, options);
 };
 
 const deleteItem = ({ qry = {} }) => {
-  return User.deleteOne(qry);
+  return Country.deleteOne(qry);
 };
 
 const deleteItemById = ({ id }) => {
-  return User.findByIdAndDelete(id);
+  return Country.findByIdAndDelete(id);
 };
 
 const deleteManyItem = ({ qry = {} }) => {
-  return User.deleteMany(qry);
+  return Country.deleteMany({});
 };
 
 module.exports = {

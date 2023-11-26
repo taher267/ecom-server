@@ -1,34 +1,34 @@
-const { User } = require("../../models");
+const { Review } = require("../../models");
 
 const findAllItems = ({ qry = {}, select = "" }) => {
-  return User.find(qry).select(select).exec();
+  return Review.find(qry).select(select).exec();
 };
 
 const findItem = ({ qry = {}, select = "" }) => {
-  return User.findOne(qry).select(select).exec();
+  return Review.findOne(qry).select(select).exec();
 };
 const findItemById = ({ id, select = "" }) => {
-  return User.findById(id).select(select).exec();
+  return Review.findById(id).select(select).exec();
 };
 
 const updateItem = ({ qry = {}, updateDate = {}, options = {} }) => {
-  return User.updateOne(qry, updateDate, options);
+  return Review.updateOne(qry, updateDate, options);
 };
 
 const updateItemById = ({ id, updateDate = {}, options = {} }) => {
-  return User.findByIdAndUpdate(id, updateDate, options);
+  return Review.findByIdAndUpdate(id, updateDate, options);
 };
 
 const deleteItem = ({ qry = {} }) => {
-  return User.deleteOne(qry);
+  return Review.deleteOne(qry);
 };
 
 const deleteItemById = ({ id }) => {
-  return User.findByIdAndDelete(id);
+  return Review.findByIdAndDelete(id);
 };
 
 const deleteManyItem = ({ qry = {} }) => {
-  return User.deleteMany(qry);
+  return Review.deleteMany(qry);
 };
 
 module.exports = {

@@ -1,34 +1,34 @@
-const { User } = require("../../models");
+const { ProductConfiguration } = require("../../models");
 
 const findAllItems = ({ qry = {}, select = "" }) => {
-  return User.find(qry).select(select).exec();
+  return ProductConfiguration.find(qry).select(select).exec();
 };
 
 const findItem = ({ qry = {}, select = "" }) => {
-  return User.findOne(qry).select(select).exec();
+  return ProductConfiguration.findOne(qry).select(select).exec();
 };
 const findItemById = ({ id, select = "" }) => {
-  return User.findById(id).select(select).exec();
+  return ProductConfiguration.findById(id).select(select).exec();
 };
 
 const updateItem = ({ qry = {}, updateDate = {}, options = {} }) => {
-  return User.updateOne(qry, updateDate, options);
+  return ProductConfiguration.updateOne(qry, updateDate, options);
 };
 
 const updateItemById = ({ id, updateDate = {}, options = {} }) => {
-  return User.findByIdAndUpdate(id, updateDate, options);
+  return ProductConfiguration.findByIdAndUpdate(id, updateDate, options);
 };
 
 const deleteItem = ({ qry = {} }) => {
-  return User.deleteOne(qry);
+  return ProductConfiguration.deleteOne(qry);
 };
 
 const deleteItemById = ({ id }) => {
-  return User.findByIdAndDelete(id);
+  return ProductConfiguration.findByIdAndDelete(id);
 };
 
 const deleteManyItem = ({ qry = {} }) => {
-  return User.deleteMany(qry);
+  return ProductConfiguration.deleteMany(qry);
 };
 
 module.exports = {
