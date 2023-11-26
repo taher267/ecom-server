@@ -8,7 +8,18 @@ const userSchema = new Schema(
       required: [false, "Phone number is mandatory"],
     },
     password: { type: String, required: [false, "Phone number is mandatory"] },
+    passwordAllow: {
+      type: String,
+      required: [false, "Phone number is mandatory"],
+    },
     lastLogin: { type: Date },
+    roles: {
+      type: [String],
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "pending"],
+    },
   },
   { timestamps: true }
 );
