@@ -2,15 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const categorySchema = new Schema({
   name: {
-    //Clothing Men's Shoes Hair Products
     type: String,
-    required: [true, "Payment type id is mandatory"],
-    ref: "PaymentType",
+    required: [true, "Name is mandatory"],
   },
-  parent_category_id: {
-    type: Schema.ObjectId,
-    required: [false, "User id is mandatory"],
-    ref: "Category",
+  description: {
+    type: String,
+    required: [false, "Description id is mandatory"],
   },
 });
 

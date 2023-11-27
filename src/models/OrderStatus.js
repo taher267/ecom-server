@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const orderStatusSchema = new Schema({
-  user_id: {
+  status: {
     type: String,
     required: [true, "User id is mandatory"],
     enum: ["Ordered", "In Transit", "Delivered", "Cancelled"],

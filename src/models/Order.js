@@ -34,7 +34,7 @@ const orderSchema = new Schema(
     order_status: {
       type: String,
       required: [true, "order status id is mandatory"],
-      ref: "OrderStatus",
+      enum: ["Ordered", "In-Transit", "Delivered", "Cancelled"],
     },
   },
   { timestamps: true }
