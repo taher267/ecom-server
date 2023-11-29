@@ -1,0 +1,14 @@
+- src
+  - api
+  - config
+  - db
+  - middleware
+  - models
+  - repo
+  - routes
+  - service
+  - utils
+  - app.js
+  - index.js
+- .env
+- package.json
