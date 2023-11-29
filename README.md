@@ -1,13 +1,74 @@
 - src
   - api
+    - v1
+      - auth
+      - user
   - config
+    - default.js
   - db
+    - connectDB.js
+    - index.js
   - middleware
+    - authenticate.js
+    - index.js
   - models
+    - index.js
+    - Address.js
+    - Category.js
+    - Order.js
+    - OrderLine.js
+    - OrderStatus.js (extra)
+    - PaymentMethod.js
+    - PaymentType.js
+    - Product.js
+    - ProductCongiguration.js
+    - ProductItem.js
+    - Promotion.js
+    - PromotionCategory.js
+    - Review.js
+    - ShoppingMethod.js
+    - ShoppingCart.js
+    - ShoppingCartItem.js
+    - SubCategory.js
+    - User.js
+    - UserAddresses.js
+    - Variation.js
+    - VariationOption.js
   - repo
+    - index.js
+    - address
+    - category
+    - order
+    - orderLine
+    - paymentMethod
+    - paymentType
+    - product
+    - productCongiguration
+    - productItem
+    - promotion
+    - promotionCategory
+    - review
+    - shoppingMethod
+    - shoppingCart
+    - shoppingCartItem
+    - subCategory
+    - user
+    - userAddresses
+    - variation
+    - variationOption
   - routes
+    - index.js
   - service
+    - auth
+    - order
+    - product
+    - user
   - utils
+    - error.js
+    - hashing.js
+    - index.js
+    - sendMail.js
+    - verityJWT.js
   - app.js
   - index.js
 - .env
