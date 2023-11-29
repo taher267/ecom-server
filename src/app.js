@@ -14,7 +14,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.use((err, _req, res, next) => {
+app.use((err, _req, res, _next) => {
   // TODO: format error
   console.log(err);
   res.status(err.status || 500).json({
