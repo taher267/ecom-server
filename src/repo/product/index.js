@@ -30,8 +30,18 @@ const deleteItemById = ({ id }) => {
 const deleteManyItem = ({ qry = {} }) => {
   return Product.deleteMany(qry);
 };
-
+const createItem = async ({ ...data }) => {
+  const newData = await Product.create(data);
+  return { ...newData._doc, id: newData.id };
+};
+const createNewItem = async ({ ...data }) => {
+  const newData = new Product(data);
+  await newData.save();
+  return { ...newData._doc, id: newData.id };
+};
 module.exports = {
+  createItem,
+  createNewItem,
   findAllItems,
   findItem,
   findItemById,
