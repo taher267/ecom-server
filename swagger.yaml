@@ -189,6 +189,68 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+  "/users/{id}":
+    get:
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      description: Retrieve single user
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      responses:
+        "200":
+          description: A single item details
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Retrieved a data, Successfully!
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/UserCommon"
+                      - $ref: "#components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+    delete:
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      description: Delete single data
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      responses:
+        "200":
+          description: Delete single item details
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Data has been deleted, Successfully!
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
   "/products":
     post:
       operationId: createProduct
@@ -429,7 +491,13 @@ components:
       allOf:
         - $ref: "#components/schemas/UserCommon"
         - $ref: "#components/schemas/Timestamp"
-        - type: object
+        - type:
+            object
+            # - $ref: "#components/schemas/Timestamp"
+    # UserSingleResponse:
+    #   properties:
+    #     - $ref: "#components/schemas/UserCommon"
+    #     - $ref: "#components/schemas/Timestamp"
 
     UserCommon:
       properties:
@@ -578,6 +646,14 @@ components:
       schema:
         type: string
         example: title
+    idPathParam:
+      in: path
+      name: id
+      required: true
+      description: Data ID of single item Retrieve
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
   responses:
     "500":
       description: "Internal Server Error"

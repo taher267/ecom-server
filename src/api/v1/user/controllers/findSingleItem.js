@@ -1,24 +1,21 @@
-const articleService = require('../../../../lib/article');
+const userService = require("../../../../service/user");
 
 const findSingleItem = async (req, res, next) => {
-	const id = req.params.id;
-	const expand = req.query.expand || '';
+  const id = req.params.id;
 
-	try {
-		const article = await articleService.findSingleItem({ id, expand });
-		const response = {
-			data: article,
-			links: {
-				self: `/articles/${article.id}`,
-				author: `/articles/${article.id}/author`,
-				comments: `/articles/${article.id}/comments`,
-			},
-		};
+  try {
+    const { user, ...rest } = await userService.findSingleItem({
+      id,
+    });
+    const response = {
+      user,
+      ...rest,
+    };
 
-		res.status(200).json(response);
-	} catch (e) {
-		next(e);
-	}
+    res.status(200).json(response);
+  } catch (e) {
+    next(e);
+  }
 };
 
 module.exports = findSingleItem;

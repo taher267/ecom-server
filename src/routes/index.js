@@ -22,6 +22,15 @@ router
    * @route base_url/api/v1/users
    */
   .get(userControllers.findAllItems);
+router
+  .route(`${v1}/users/:id`)
+  /**
+   * Private Route
+   * @method GET
+   * @route base_url/api/v1/users/:id
+   */
+  .get(userControllers.findSingleItem);
+
 // Product
 router
   .route(`${v1}/products`)
