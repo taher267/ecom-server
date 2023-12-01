@@ -30,8 +30,20 @@ const deleteItemById = ({ id }) => {
 const deleteManyItem = ({ qry = {} }) => {
   return SubCategory.deleteMany(qry);
 };
-
+const createNewItem = async ({ ...data }) => {
+  const newData = new SubCategory(data);
+  await newData.save();
+  return { ...newData._doc, id: newData.id };
+};
+const count = ({ search = "" }) => {
+  const filter = {
+    title: { $regex: search, $options: "i" },
+  };
+  return SubCategory.countDocuments(filter);
+};
 module.exports = {
+  createNewItem,
+  count,
   findAllItems,
   findItem,
   findItemById,

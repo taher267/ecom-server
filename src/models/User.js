@@ -14,11 +14,21 @@ const userSchema = new Schema(
       trim: true,
       required: [false, "Phone number is mandatory"],
     },
-    password: { type: String, required: [false, "Password is mandatory"] },
-    passwordAllow: {
+    username: {
       type: String,
-      required: [false, "allow password is mandatory"],
+      trim: true,
+      required: [false, "Username is mandatory"],
     },
+    password: {
+      type: String,
+      required: [false, "Password is mandatory"],
+      select: false,
+    },
+
+    // passwordAllow: {
+    //   type: String,
+    //   required: [false, "allow password is mandatory"],
+    // },
     lastLogin: { type: Date },
     roles: {
       type: [String],

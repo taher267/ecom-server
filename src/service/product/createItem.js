@@ -37,7 +37,9 @@ const createItem = async ({
   if (images?.length) {
     newObj.images = images;
   }
-  const existProduct = await productRepo.findItem({ qry: { SKU } });
+  const existProduct = await productRepo.findItem({
+    qry: { SKU: { $regex: SKU, $options: "i" } },
+  });
   if (existProduct) {
     throw customError({ errors: [{ SKU: `SKU already exist!` }] });
   }

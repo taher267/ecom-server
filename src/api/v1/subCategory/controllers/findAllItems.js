@@ -1,4 +1,4 @@
-const productService = require("../../../../service/product");
+const subCategoryService = require("../../../../service/subCategory");
 // const { query } = require("../../../../utils");
 const defaults = require("../../../../config/defaults");
 
@@ -12,7 +12,7 @@ const findAllItems = async (req, res, next) => {
 
   try {
     // data
-    const products = await productService.findAllItems({
+    const products = await subCategoryService.findAllItems({
       page,
       limit,
       sortType,
@@ -20,26 +20,6 @@ const findAllItems = async (req, res, next) => {
       search,
       request: { path, url, query },
     });
-
-    // const data = query.getTransformedItems({
-    //   items: articles,
-    //   selection: ["id", "title", "cover", "author", "updatedAt", "createdAt"],
-    //   path: "/articles",
-    // });
-
-    // // pagination
-    // const totalItems = await productService.count({ search });
-    // const pagination = query.getPagination({ totalItems, limit, page });
-
-    // // HATEOAS Links
-    // const links = query.getHATEOASForAllItems({
-    //   url: req.url,
-    //   path: req.path,
-    //   query: req.query,
-    //   hasNext: !!pagination.next,
-    //   hasPrev: !!pagination.prev,
-    //   page,
-    // });
 
     res.status(200).json({
       ...products,

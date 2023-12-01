@@ -46,7 +46,12 @@ const productSchema = new Schema(
         required: [false, "Product image is mandatory"],
       },
     ],
-    author: [Schema.ObjectId],
+    author: [
+      {
+        type: Schema.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

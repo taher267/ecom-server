@@ -1,7 +1,32 @@
 const { Product } = require("../../models");
 
-const findAllItems = ({ qry = {}, select = "" }) => {
-  return Product.find(qry).select(select).exec();
+const findAllItems = async ({
+  qry = {},
+  populate,
+  sortStr = "-createdAt",
+  skip = 0,
+  limit = 10,
+  select = "",
+}) => {
+  let products = [];
+  if (populate) {
+    products = await Product.find(qry)
+      .populate({ ...populate })
+      .select(select)
+      .sort(sortStr)
+      .skip(skip)
+      .limit(limit);
+  } else {
+    products = await Product.find(qry)
+      .select(select)
+      .sort(sortStr)
+      .skip(skip)
+      .limit(limit);
+  }
+  return products.map((product) => ({
+    ...product._doc,
+    id: product.id,
+  }));
 };
 
 const findItem = ({ qry = {}, select = "" }) => {
@@ -39,7 +64,20 @@ const createNewItem = async ({ ...data }) => {
   await newData.save();
   return { ...newData._doc, id: newData.id };
 };
+/**
+ * Count all article
+ * @param {*} param0
+ * @returns
+ */
+const count = ({ search = "" }) => {
+  const filter = {
+    title: { $regex: search, $options: "i" },
+  };
+
+  return Product.countDocuments(filter);
+};
 module.exports = {
+  count,
   createItem,
   createNewItem,
   findAllItems,
@@ -51,3 +89,5 @@ module.exports = {
   deleteItemById,
   deleteManyItem,
 };
+
+// findAllItems({ select: "_id" }).then(console.log).catch(console.error);

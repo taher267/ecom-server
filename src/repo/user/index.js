@@ -1,7 +1,32 @@
 const { User } = require("../../models");
 
-const findAllItems = ({ qry = {}, select = "" }) => {
-  return User.find(qry).select(select).exec();
+const findAllItems = async ({
+  qry = {},
+  populate,
+  sortStr = "-createdAt",
+  skip = 0,
+  limit = 10,
+  select = "",
+}) => {
+  let users = [];
+  if (populate) {
+    users = await User.find(qry)
+      .populate({ ...populate })
+      .select(select)
+      .sort(sortStr)
+      .skip(skip)
+      .limit(limit);
+  } else {
+    users = await User.find(qry)
+      .select(select)
+      .sort(sortStr)
+      .skip(skip)
+      .limit(limit);
+  }
+  return users.map((user) => ({
+    ...user._doc,
+    id: user.id,
+  }));
 };
 
 const findItem = ({ qry = {}, select = "" }) => {
@@ -30,8 +55,18 @@ const deleteItemById = ({ id }) => {
 const deleteManyItem = ({ qry = {} }) => {
   return User.deleteMany(qry);
 };
+const createNewItem = async ({ ...data }) => {
+  const newData = new User(data);
+  await newData.save();
+  return { ...newData._doc, id: newData.id };
+};
+const count = ({ filter }) => {
+  return User.countDocuments(filter);
+};
 
 module.exports = {
+  createNewItem,
+  count,
   findAllItems,
   findItem,
   findItemById,
