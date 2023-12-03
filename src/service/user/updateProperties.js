@@ -1,24 +1,15 @@
 const userRepo = require("../../repo/user");
 const updateProperties = async (id, { status }) => {
-  const user = await userRepo.find({ id });
-  if (!user) {
+  const updated = await userRepo.updateItemById({
+    id,
+    updateDate: { status },
+  });
+  if (!updated) {
     throw notFound();
   }
-
-  if (qry?.length) {
-    const existUser = await userRepo.findItem({ qry: { $or: qry } });
-    if (existUser || existUser.id !== id) {
-      throw badRequest();
-    }
-  }
-  // const payload = { name, username, phone_number, status };
-
-  // Object.keys(payload).forEach((key) => {
-  //   user[key] = payload[key] ?? user[key];
-  // });
-
-  // await user.save();
-  return { ...user._doc, id: user.id };
+  const copy = { ...updated };
+  // delete copy.password;
+  return { ...copy };
 };
 
 module.exports = updateProperties;

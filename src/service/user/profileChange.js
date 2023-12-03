@@ -1,6 +1,6 @@
 const userRepo = require("../../repo/user");
 const { badRequest } = require("../../utils/error");
-const updateProperties = async (id, { name, username, phone_number }) => {
+const profileChange = async (id, { name, username, phone_number }) => {
   const user = await userRepo.findItemById({ id });
   if (!user) {
     throw notFound();
@@ -42,4 +42,4 @@ const updateProperties = async (id, { name, username, phone_number }) => {
   return updated;
 };
 
-module.exports = updateProperties;
+module.exports = profileChange;

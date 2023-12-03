@@ -1,28 +1,33 @@
-const userRepo = require("../../../../repo/user");
+const userService = require("../../../../service/user");
 
 const updateItem = async (req, res, next) => {
   const { id } = req.params;
-  const cover = req.body.cover || "";
-  const status = req.body.status || "draft";
+  const { name, email, phone_number, username, lastLogin, roles, status } =
+    req.body;
 
   try {
-    const { article, code } = await userRepo.updateOrCreate(id, {
-      title: req.body.title,
-      body: req.body.body,
-      author: req.user,
-      cover,
-      status,
+    const { user, code } = await userService.updateOrCreate(id, {
+      id,
+      updateData: {
+        name,
+        email,
+        phone_number,
+        username,
+        lastLogin,
+        roles,
+        status,
+      },
     });
 
     const response = {
       code,
       message:
         code === 200
-          ? "Article updated successfully"
-          : "Article created successfully",
-      data: article,
+          ? "user updated successfully"
+          : "user created successfully",
+      data: user,
       links: {
-        self: `/articles/${article.id}`,
+        self: `/users/${user.id}`,
       },
     };
 

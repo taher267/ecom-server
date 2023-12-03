@@ -11,13 +11,13 @@ router.route(`${v1}/auth/login`).post(authControllers.login);
 router
   .route(`${v1}/users`)
   /**
-   * Private Route
+   * Private Route with ADMIN
    * @method POST
    * @route base_url/api/v1/users
    */
   .post(userControllers.create)
   /**
-   * Private Route
+   * Private Route With Admin
    * @method GET
    * @route base_url/api/v1/users
    */
@@ -36,7 +36,22 @@ router
    * @method DELETE
    * @route base_url/api/v1/users
    */
-  .delete(userControllers.removeItem);
+  .delete(userControllers.removeItem)
+  /**
+   * Private Route with ADMIN
+   * @method PUT
+   * @route base_url/api/v1/users
+   */
+  .put(userControllers.updateItem)
+  /**
+   * Private Route
+   * @method PATCH
+   * @route base_url/api/v1/users
+   */
+  .path(userControllers.updateItemPatch);
+router
+  .route(`${v1}/users/:id/update-profile`)
+  .patch(userControllers.profileChange);
 
 // Product
 router

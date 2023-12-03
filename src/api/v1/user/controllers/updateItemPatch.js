@@ -1,17 +1,17 @@
-const articleService = require('../../../../lib/article');
+const userService = require('../../../../service/user');
 
 const updateItemPatch = async (req, res, next) => {
 	const { id } = req.params;
 
 	try {
-		const article = await articleService.updateProperties(id, req.body);
+		const user = await userService.updateProperties(id, req.body);
 
 		const response = {
 			code: 200,
-			message: 'Article updated successfully',
-			data: article,
+			message: 'user updated successfully',
+			data: user,
 			links: {
-				self: `/articles/${article.id}`,
+				self: `/users/${user.id}`,
 			},
 		};
 

@@ -27,6 +27,7 @@ const updateOrCreate = async ({
         email,
         password,
       };
+      
       const qry = [{ email }];
 
       if (phone_number) {
