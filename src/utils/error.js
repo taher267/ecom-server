@@ -34,6 +34,12 @@ const customError = ({ message = "Bad request", status = 400, errors }) => {
   error.errors = errors;
   return error;
 };
+const onlyError = ({ message = "Something Went Wrong" }) => {
+  const error = new Error(message);
+  // error.status = status;
+  // error.errors = errors;
+  return error;
+};
 
 module.exports = {
   notFound,
@@ -42,4 +48,5 @@ module.exports = {
   authenticationError,
   authorizationError,
   customError,
+  onlyError,
 };

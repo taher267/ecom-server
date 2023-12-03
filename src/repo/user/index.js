@@ -41,12 +41,18 @@ const findItemById = async ({ id, select = "" }) => {
   return copy;
 };
 
-const updateItem = ({ qry = {}, updateDate = {}, options = {} }) => {
-  return User.updateOne(qry, updateDate, options);
+const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
+  const updated = await User.updateOne(qry, updateDate, options);
+  if (!updated.matchedCount) return false;
+  return updated;
 };
 
-const updateItemById = ({ id, updateDate = {}, options = {} }) => {
-  return User.findByIdAndUpdate(id, updateDate, options);
+const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
+  const updated = await User.findByIdAndUpdate(id, updateDate, options);
+  if (!updated.matchedCount) return false;
+  const copy = { id: updated.id, ...updated._doc };
+  delete copy._id;
+  return copy;
 };
 
 const deleteItem = ({ qry = {} }) => {
@@ -63,7 +69,15 @@ const deleteManyItem = ({ qry = {} }) => {
 const createNewItem = async ({ ...data }) => {
   const newData = new User(data);
   await newData.save();
-  return { ...newData._doc, id: newData.id };
+  const copy = newData._doc;
+  delete copy._id;
+  return { id: newData.id, ...copy };
+};
+const create = async ({ ...data }) => {
+  const user = await User.create(data);
+  const copy = { id: user.id, ...user._doc };
+  delete copy._id;
+  return copy;
 };
 const count = ({ filter }) => {
   return User.countDocuments(filter);
@@ -71,6 +85,7 @@ const count = ({ filter }) => {
 
 module.exports = {
   createNewItem,
+  create,
   count,
   findAllItems,
   findItem,

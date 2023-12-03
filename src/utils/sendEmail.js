@@ -1,6 +1,6 @@
 // require("dotenv").config();
 const { createTransport } = require("nodemailer");
-const { SMTP_MAIL, SMTP_EMAIL_PASS } = process.env;
+const { SMTP_MAIL, SMTP_EMAIL_PASS, SMTP_HOST, SMTP_PORT } = process.env;
 const temp = `
 <h1>Bismillah</h1>
 <p>Paragraph</p>
@@ -18,9 +18,9 @@ module.exports = async function sendEmail({
   pass = SMTP_EMAIL_PASS,
 }) {
   let transporter = createTransport({
-    host: process.env.SMTP_HOST,
+    host: SMTP_HOST,
     // service: "gmail",
-    port: Number(process.env.SMTP_PORT),
+    port: Number(SMTP_PORT),
     secure: false,
     auth: {
       user,

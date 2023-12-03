@@ -22,6 +22,7 @@ router
    * @route base_url/api/v1/users
    */
   .get(userControllers.findAllItems);
+
 router
   .route(`${v1}/users/:id`)
   /**
@@ -29,7 +30,13 @@ router
    * @method GET
    * @route base_url/api/v1/users/:id
    */
-  .get(userControllers.findSingleItem);
+  .get(userControllers.findSingleItem)
+  /**
+   * Private Route
+   * @method DELETE
+   * @route base_url/api/v1/users
+   */
+  .delete(userControllers.removeItem);
 
 // Product
 router

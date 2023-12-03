@@ -8,6 +8,9 @@ const findAllItems = async (req, res, next) => {
   const sortType = req.query.sort_type || defaults.sortType;
   const sortBy = req.query.sort_by || defaults.sortBy;
   const search = req.query.search || defaults.search;
+  const searchBy = req.query.searchBy || "";
+  const searchType = req.query.searchType || "";
+
   const { path, url, query } = req;
 
   try {
@@ -18,6 +21,8 @@ const findAllItems = async (req, res, next) => {
       sortType,
       sortBy,
       search,
+      searchBy,
+      searchType,
       request: { path, url, query },
     });
 

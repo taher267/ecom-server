@@ -129,7 +129,7 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: "#components/schemas/UserRequest"
+              $ref: "#components/schemas/User"
       responses:
         "201":
           description: Create user by adimin
@@ -166,6 +166,8 @@ paths:
         - $ref: "#/components/parameters/sortTypeParam"
         - $ref: "#/components/parameters/sortByParam"
         - $ref: "#/components/parameters/searchParam"
+        - $ref: "#/components/parameters/searchByParam"
+        - $ref: "#/components/parameters/searchTypeParam"
 
       responses:
         "200":
@@ -185,6 +187,28 @@ paths:
                       type: object
                       properties:
                       $ref: "#components/schemas/UserResponse"
+                  totalItems:
+                    type: integer
+                    format: int32
+                    example: 2
+                  pagination:
+                    $ref: "#/components/schemas/Pagination"
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=2&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+                      prev:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=21&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+                      next:
+                        type: string
+                        format: url
+                        example: "/api/v1/users?page=1&limit=1&sort_type=dsc&sort_by=createdAt&search=title"
+
         "400":
           $ref: "#/components/responses/400"
         "500":
@@ -264,8 +288,7 @@ paths:
           "application/json":
             schema:
               type: object
-              # $ref: "#components/schemas/UserCommon"
-              # $ref: "#components/schemas/UserCommon"
+              $ref: "#components/schemas/UserCommon"
       responses:
         "201":
           description: Signup Successful
@@ -472,14 +495,36 @@ components:
       bearerFormat: JWT
   schemas:
     User:
-      allOf:
-        - $ref: "#components/schemas/UserCommon"
-          # - type: object
-          # properties:
+      properties:
+        name:
+          type: string
+          example: Taher
+        email:
+          type: string
+          format: email
+          example: example@domain.com
+        username:
+          type: string
+          example: taher267
+        phone_number:
+          type: string
+          example: 019xxxxxxxxx
+        # password:
+        #   type: string
+        #   format: password
+        passwordAllow:
+          type: boolean
+        lastLogin:
+          type: string
+          format: data-time
+        status:
+          type: string
+          # example: active
+          enum: ["active", "inactive", "pending"]
 
     UserRequest:
       allOf:
-        - $ref: "#components/schemas/UserCommon"
+        - $ref: "#components/schemas/User"
         - type: object
           properties:
             password:
@@ -491,13 +536,6 @@ components:
       allOf:
         - $ref: "#components/schemas/UserCommon"
         - $ref: "#components/schemas/Timestamp"
-        - type:
-            object
-            # - $ref: "#components/schemas/Timestamp"
-    # UserSingleResponse:
-    #   properties:
-    #     - $ref: "#components/schemas/UserCommon"
-    #     - $ref: "#components/schemas/Timestamp"
 
     UserCommon:
       properties:
@@ -607,6 +645,55 @@ components:
           type: string
           format: data-time
           # example: "2023-09-20T00:25:31.597Z"
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          example: 2
+        limit:
+          type: integer
+          format: int32
+          example: 10
+        next:
+          type: integer
+          format: int32
+          example: 3
+        prev:
+          type: integer
+          format: int32
+          example: 1
+        totalPage:
+          type: integer
+          format: int32
+          example: 5
+        totalItems:
+          type: integer
+          format: int32
+          example: 50
+      required:
+        - page
+        - limit
+        - totalPage
+        - totalItems
+
+    Links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: url
+          example: "/products/1"
+        author:
+          type: string
+          format: url
+          example: "/products/1/author"
+        reviews:
+          type: string
+          format: url
+          example: "/products/1/reviews"
+
   parameters:
     pageParam:
       in: query
@@ -646,6 +733,22 @@ components:
       schema:
         type: string
         example: title
+    searchByParam:
+      in: query
+      name: searchBy
+      description: search field
+      schema:
+        type: string
+        example: name
+    searchTypeParam:
+      in: query
+      name: searchType
+      description: matching with search value or simillar type value
+      schema:
+        type: string
+        enum:
+          - strict
+          - pattern
     idPathParam:
       in: path
       name: id

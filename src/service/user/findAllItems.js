@@ -24,7 +24,7 @@ const findAllItems = async ({
   const filter = {};
 
   if (searchBy && search) {
-    if (searchType === "patternSearch") {
+    if (searchType === "pattern") {
       filter[searchBy] = { $regex: search, $options: "i" };
     } else if (searchType === "strict") {
       filter[searchBy] = search;
