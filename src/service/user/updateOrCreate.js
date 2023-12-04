@@ -6,43 +6,30 @@ const bcrypt = require("bcrypt");
 
 const updateOrCreate = async ({
   id,
-  updateData: { name, email, phone_number, username, lastLogin, roles, status },
+  data: { name, email, phone_number, username, lastLogin, roles, status },
 }) => {
   let newUser;
   try {
-    const updateObj = {
-      name,
-    };
-    const user = await userRepo.updateItemById({
-      id,
-      updateDate: updateObj,
-      options: { new: true },
-    });
+    const existUser = await userRepo.findItemById({ id });
+    if (existUser) {
+      const payload = {};
+      if (name) {
+        payload.name = name;
+      }
 
-    if (!user) {
-      const raw = randomBytes(8).toString("hex").toUpperCase();
-      const password = await bcrypt.hash(raw, await bcrypt.genSalt(10));
-      const newObj = {
-        name,
-        email,
-        password,
-      };
-      
-      const qry = [{ email }];
+      const qry = [];
+      if (username) {
+        payload.username = username;
+        qry.push({ username });
+      }
 
       if (phone_number) {
+        payload.phone_number = phone_number;
         qry.push({ phone_number });
-        newObj.phone_number = phone_number;
       }
-      if (username) {
-        qry.push({ username });
-        newObj.username = username;
-      }
-      if (roles) {
-        newObj.roles = roles;
-      }
-      if (status) {
-        newObj.status = status;
+
+      if (!Object.keys(payload).length) {
+        throw badRequest(`Nothing to be changed!`);
       }
 
       if (qry?.length) {
@@ -52,18 +39,58 @@ const updateOrCreate = async ({
         }
       }
 
-      const user = await userRepo.create(newObj);
-      newUser = user.id;
-      await sendEmail({
-        to: email,
-        subject: `user credentials`,
-        html: `email:${email}, password:${raw}`,
+      const updated = await userRepo.updateItemById({
+        id,
+        updateDate: payload,
+        options: { new: true },
       });
-      return {
-        user,
-        code: 201,
-      };
+      return { user: updateOrCreate, code: 200 };
     }
+
+    const raw = randomBytes(8).toString("hex").toUpperCase();
+
+    const newObj = {
+      name,
+      email,
+    };
+
+    const qry = [{ email }];
+
+    if (phone_number) {
+      qry.push({ phone_number });
+      newObj.phone_number = phone_number;
+    }
+    if (username) {
+      qry.push({ username });
+      newObj.username = username;
+    }
+    if (roles) {
+      newObj.roles = roles;
+    }
+    if (status) {
+      newObj.status = status;
+    }
+
+    if (qry?.length) {
+      const existUser = await userRepo.findItem({ qry: { $or: qry } });
+      if (existUser || existUser.id !== id) {
+        throw badRequest();
+      }
+    }
+    const password = await bcrypt.hash(raw, await bcrypt.genSalt(10));
+    newObj.password = password;
+    const user = await userRepo.create(newObj);
+    newUser = user.id;
+    await sendEmail({
+      to: email,
+      subject: `user credentials`,
+      html: `email:${email}, password:${raw}`,
+    });
+    return {
+      user,
+      code: 201,
+    };
+
     return { user: { ...user._doc, id: user.id }, code: 200 };
   } catch (e) {
     if (newUser) {

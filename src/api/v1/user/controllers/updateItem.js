@@ -8,7 +8,7 @@ const updateItem = async (req, res, next) => {
   try {
     const { user, code } = await userService.updateOrCreate(id, {
       id,
-      updateData: {
+      data: {
         name,
         email,
         phone_number,

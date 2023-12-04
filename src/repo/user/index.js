@@ -49,7 +49,7 @@ const updateItem = async ({ qry = {}, updateDate = {}, options = {} }) => {
 
 const updateItemById = async ({ id, updateDate = {}, options = {} }) => {
   const updated = await User.findByIdAndUpdate(id, updateDate, options);
-  if (!updated.matchedCount) return false;
+  if (!updated) return false;
   const copy = { id: updated.id, ...updated._doc };
   delete copy._id;
   return copy;

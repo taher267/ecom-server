@@ -1,8 +1,18 @@
 const userRepo = require("../../repo/user");
-const updateProperties = async (id, { status }) => {
+const updateProperties = async (id, { status, roles }) => {
+
+  const updateDate={
+
+  }
+  if(status){
+    updateDate.status=status
+  }
+  if(roles){
+    updateDate.roles=roles
+  }
   const updated = await userRepo.updateItemById({
     id,
-    updateDate: { status },
+    updateDate,
   });
   if (!updated) {
     throw notFound();

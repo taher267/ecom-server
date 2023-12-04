@@ -247,6 +247,45 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+    put:
+      operationId: updateOrCreateUser
+      security:
+        - bearerAuth: []
+      description: If exist user than update other wise create a user. only update those specified field(name, phone_number, username)
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#components/schemas/User"
+      responses:
+        "200":
+          description: Update user info!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Retrieved a data, Successfully!
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/UserCommon"
+                      - $ref: "#components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+
     delete:
       operationId: deleteUser
       security:
