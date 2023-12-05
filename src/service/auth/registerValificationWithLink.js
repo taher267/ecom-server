@@ -1,29 +1,23 @@
+const cache = require("../../cache");
 const userRepo = require("../../repo/user");
-const { badRequest } = require("../../utils/error");
+const { sendEmail } = require("../../utils");
+const { badRequest, serverError } = require("../../utils/error");
+const { generateHash } = require("../../utils/hashing");
 const verifyJwt = require("../../utils/verityJWT");
 const strToCryptoHash = require("./strToCryptoHash");
-const { REGISTER_LINK_SECRET } = process.env;
-// const { Types } = require("mongoose");
-// const hashTkn = ``;
-// const dec= verifyJwt({ secret: REGISTER_LINK_SECRET, token: hashTkn });
-// console.log(dec)
-// console.log(new Date(1700474814*1000).toString())
-// console.log(strToCryptoHash({str:hash}))
-// creditRepo.createItem({data:{userId:new Types.ObjectId()}}).then(console.log).catch(console.error)
+const {
+  REGISTER_LINK_SECRET,
+  REFRESH_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRY,
+  SMTP_MAIL,
+} = process.env;
 
-// this.isModified("password")
-// userRepo
-//   .createItem({ data: { name: "99999", email: "99999", password: "99999" } })
-//   .then(console.log)
-//   .catch(console.error);
-// userRepo
-//   .updateItem({ qry: { email: "99999"}, updateDate:{ password: "333333" }, options:{runValidators:true} })
-//   .then(console.log)
-//   .catch(console.error);
-// userRepo
-// .findItem({ qry: { email: "99999"},select:'+password'})
-// .then(console.log)
-// .catch(console.error);
+// const sign =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAZG9tYWluLmNvbSIsImhhc2giOiIzYTM5YzZkYmQwMGJlMDA5OGM3Y2RmYzRiNjdmZTc0NWQyMDQxNmUxLmV4YW1wbGVAZG9tYWluLmNvbSIsImlhdCI6MTcwMTc5Nzg3NSwiZXhwIjoxNzAxNzk4Nzc1fQ.UJCwLYZYmYoLx0xVO9IXJKTgQh7ng9x_j_cwStSyb0M";
+// const registerToken =
+//   "344b511a75db2c66d462129a2fd54facde7a2854592b972f9a75e0e4f65d0a6b";
+//   const {decoded:{hash}}=verifyJwt({ secret: REGISTER_LINK_SECRET, token: sign })
+// console.log(strToCryptoHash({str:hash})===registerToken)
 
 /**
  *
@@ -36,77 +30,77 @@ const { REGISTER_LINK_SECRET } = process.env;
  * if pass, create credit
  * @returns {accessToken, refreshToken, user, credits}
  */
-const registerValificationWithLink = async ({ hashToken }) => {
+const registerValificationWithLink = async ({
+  name,
+  hashToken,
+  email,
+  password,
+  username,
+  phone_number,
+}) => {
   if (!hashToken) {
     throw badRequest(`Please provide validation token!`);
   }
+  if (!REGISTER_LINK_SECRET || !REFRESH_TOKEN_SECRET || !REFRESH_TOKEN_EXPIRY) {
+    await sendEmail({
+      to: SMTP_MAIL,
+      subject: "Server Error",
+      html: `there is no env data`,
+    });
+    throw serverError(`Something Going Wrong!`);
+  }
+  if (!name || !email || !password) {
+    throw badRequest(`Invalid parameters!`);
+  }
   const verify = verifyJwt({ secret: REGISTER_LINK_SECRET, token: hashToken });
-  console.log(verify);
+
   if (!verify.success) {
     throw badRequest(verify.message);
   }
-  const {
-    decoded: { hash },
-  } = verify;
-
-  const registerToken = strToCryptoHash({ str: hash });
-
-  const user = await userRepo.findItem({
-    qry: { registerToken },
-    select: "+registerToken +tokenExpiry",
-    // resetPasswordExpire: { $gt: Date.now() },
-  });
-
-  if (!user) {
+  const { decoded } = verify;
+  const cryptoHash = strToCryptoHash({ str: decoded.hash });
+  const tokenCache = cache(decoded.email);
+  if (
+    !tokenCache?.token ||
+    tokenCache?.token !== cryptoHash ||
+    decoded.email != email
+  ) {
     throw badRequest(
       "Account varification token is invalid or has been expired!!"
     );
   }
-  if (user.status === "active") {
-    user.registerToken = null;
-    user.tokenExpiry = null;
-    await user.save();
-    return { code: 302, message: `Account already activated!` };
-  } else if (user.status === "inactive") {
-    user.registerToken = null;
-    user.tokenExpiry = null;
-    await user.save();
-    throw badRequest(`Please contact with out support!`);
-  } else if (!user.tokenExpiry || Date.now() > user.tokenExpiry) {
-    user.registerToken = null;
-    user.tokenExpiry = null;
-    await user.save();
-    throw badRequest("Account varification token has been expired!");
-  }
-  user.registerToken = null;
-  user.tokenExpiry = null;
-  user.status = "active";
-  await user.save();
-  const newCredit = await creditRepo.createItem({
-    data: { userId: user.id },
-  });
-  const credit = newCredit._doc;
-  const accessToken = user.getJWToken();
-  const refreshToken = await user.getRefreshToken({ save: true });
-  const credits = {
-    trial: credit.trial,
-    premium: credit.premium,
-    expiry: credit.expiry,
-  };
-  const userObj = {
-    ...user._doc,
-  };
-  delete userObj.password;
-  delete userObj.refreshToken;
-  delete userObj.updatedAt;
-  delete userObj.registerToken;
-  delete userObj.tokenExpiry;
 
+  const newUser = {
+    name,
+    email,
+    password: await generateHash(password),
+  };
+  if (phone_number) {
+    newUser.phone_number = phone_number;
+  }
+  if (username) {
+    newUser.username = username;
+  }
+
+  const user = await userRepo.create(newUser);
+  const { id } = user;
+  const common = { id, email };
+  const payload = {
+    ...common,
+    name,
+  };
+  const accessToken = token.generateToken({ payload });
+
+  const refreshToken = token.generateToken({
+    payload: common,
+    secret: REFRESH_TOKEN_SECRET,
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+  });
+  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
   return {
-    credits,
+    user,
     accessToken,
     refreshToken,
-    user: userObj,
   };
 };
 module.exports = registerValificationWithLink;

@@ -30,8 +30,9 @@ module.exports = async function sendEmail({
       rejectUnauthorized: false,
     },
   });
+
   return transporter.sendMail({
-    from: process.env.SMTP_MAIL, // sender address
+    from: SMTP_MAIL, // sender address
     to, // list of receivers
     subject,
     html,

@@ -66,13 +66,15 @@ const deleteItemById = ({ id }) => {
 const deleteManyItem = ({ qry = {} }) => {
   return User.deleteMany(qry);
 };
-const createNewItem = async ({ ...data }) => {
+
+const createNewItem = async ({ data }) => {
   const newData = new User(data);
   await newData.save();
   const copy = newData._doc;
   delete copy._id;
   return { id: newData.id, ...copy };
 };
+
 const create = async ({ ...data }) => {
   const user = await User.create(data);
   const copy = { id: user.id, ...user._doc };
@@ -81,6 +83,7 @@ const create = async ({ ...data }) => {
   delete copy.__v;
   return copy;
 };
+
 const count = ({ filter }) => {
   return User.countDocuments(filter);
 };

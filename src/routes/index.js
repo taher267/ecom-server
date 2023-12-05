@@ -7,6 +7,12 @@ const v1 = `/api/v1`;
 // AUTH
 router.route(`${v1}/auth/login`).post(authControllers.login);
 router.route(`${v1}/auth/register`).post(authControllers.register);
+router
+  .route(`${v1}/auth/register-with-link`)
+  .post(authControllers.registerWithLink);
+router
+  .route(`${v1}/auth/register-link-varification`)
+  .post(authControllers.registerValificationWithLink);
 // User
 
 router

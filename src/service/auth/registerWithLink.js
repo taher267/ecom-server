@@ -61,11 +61,13 @@ const registerWithLink = async ({
   }
 
   const existUser = await userRepo.findItem({ qry: { $or: qry } });
+
   if (existUser) {
     throw badRequest(`User already exist!`);
   }
 
   newData.password = await hashing.generateHash(password);
+  // console.log(newData)
   const newUser = await userRepo.createNewItem({
     data: newData,
   });
@@ -76,9 +78,8 @@ const registerWithLink = async ({
   const payload = { _id, email, hash: str };
   const { sign, exp } = getRegisterLink({ payload });
   console.log({ sign, password });
-  newUser.registerToken = registerToken;
-  newUser.tokenExpiry = exp * 1000;
-  await newUser.save();
+  // newUser.registerToken = registerToken;
+  // newUser.tokenExpiry = exp * 1000;
   const link = `${url}/${sign}`;
   const template = accountVarificationTemplate({ username: name, link });
   await sendEmail({

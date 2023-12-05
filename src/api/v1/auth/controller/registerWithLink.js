@@ -7,7 +7,8 @@ const resendRegisterLink = async (req, res, next) => {
       headers: { origin },
     } = req;
     const url = `${origin}/register-confirmation`;
-    await userService.registerWithLink({
+    
+    await userService.registerWithLinkLocalCache({
       name,
       email,
       password,
@@ -15,6 +16,7 @@ const resendRegisterLink = async (req, res, next) => {
       phone_number,
       url,
     });
+
     res.status(201).json({
       code: 201,
       message: `Register link has been send on your provided email(${email})`,

@@ -1,18 +1,25 @@
 const userService = require("../../../../service/auth");
-const {
-  badRequest,
-  customError,
-  notFound,
-} = require("../../../../utils/error");
 
-const registerValificationWithLink = async (req, res) => {
+const registerValificationWithLink = async (req, res, next) => {
   try {
-    res.json({ message: "Alhamdu lillah" });
-  } catch (e) {
-    const status = e.status || 500;
-    const message = e.message;
+    const { name, hashToken, email, password, username, phone_number } =
+      req.body;
+    const newUser = await userService.registerValificationWithLink({
+      name,
+      hashToken,
+      email,
+      password,
+      username,
+      phone_number,
+    });
 
-    res.status(status).json({ success: false, code: status, message });
+    return res.status(201).json({
+      code: 201,
+      message: `Alhamdu lillah, Account has been varified successfully!`,
+      ...newUser,
+    });
+  } catch (e) {
+    next(e);
   }
 };
 

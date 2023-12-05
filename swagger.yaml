@@ -10,6 +10,8 @@ info:
 servers:
   - description: Dev
     url: "http://localhost:4001/api/v1"
+  - description: Live
+    url: "https://ecom-server-rw2s.onrender.com/api/v1"
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
@@ -36,19 +38,8 @@ paths:
         content:
           "application/json":
             schema:
-              type: object
               properties:
-                name:
-                  type: string
-                  example: Abu Taher
-                email:
-                  type: string
-                  format: email
-                  example: example@domain.com
-                password:
-                  type: string
-                  format: password
-                  example: password13r
+              $ref: "#/components/schemas/Auth"
               required:
                 - "name"
                 - "email"
@@ -71,9 +62,14 @@ paths:
                   data:
                     type: object
                     properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/auth/login":
     post:
       operationId: login
@@ -117,7 +113,85 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-  
+  "/auth/register-with-link":
+    post:
+      operationId: registerWithLink
+      description: "User register with email link sending!"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Abu Taher
+                email:
+                  type: string
+                  format: email
+                  example: example@domain.com
+
+              required:
+                - "name"
+                - "email"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Register link has been sent on your provided email!
+  "/auth/register-link-varification":
+    post:
+      operationId: accountVarification
+      description: "Account varification by receiving mail"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Auth"
+                - $ref: "#/components/schemas/Hash"
+
+              required:
+                - "name"
+                - "email"
+                - "password"
+                - "hashToken"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Signup Successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/users":
     post:
       operationId: createUser
@@ -595,6 +669,9 @@ components:
   schemas:
     User:
       properties:
+        id:
+          type: string
+          example: "6568c4210a26245b8cb27313"
         name:
           type: string
           example: Taher
@@ -624,7 +701,29 @@ components:
           type: string
           # example: active
           enum: ["active", "inactive", "pending"]
-
+    Auth:
+      properties:
+        name:
+          type: string
+          example: Taher
+        email:
+          type: string
+          format: email
+          example: example@domain.com
+        username:
+          type: string
+          example: taher267
+        phone_number:
+          type: string
+          example: 019xxxxxxxxx
+        password:
+          type: string
+          format: password
+    Hash:
+      properties:
+        hashToken:
+          type: string
+          example: jfksajfkajffkajfkajfkasjfksjfksajfksdjafksajfksajfkdsajfkdsj
     UserRequest:
       allOf:
         - $ref: "#components/schemas/User"
@@ -743,11 +842,11 @@ components:
         createdAt:
           type: string
           format: data-time
-          # example: "2023-09-20T00:25:31.597Z"
+          example: "2023-09-20T00:25:31.597Z"
         updatedAt:
           type: string
           format: data-time
-          # example: "2023-09-20T00:25:31.597Z"
+          example: "2023-09-20T00:25:31.597Z"
     Pagination:
       type: object
       properties:
