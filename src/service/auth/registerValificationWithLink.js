@@ -59,7 +59,7 @@ const registerValificationWithLink = async ({
   }
   const { decoded } = verify;
   const cryptoHash = strToCryptoHash({ str: decoded.hash });
-  const tokenCache = cache(decoded.email);
+  const tokenCache = cache.get(decoded.email);
   if (
     !tokenCache?.token ||
     tokenCache?.token !== cryptoHash ||
@@ -97,6 +97,7 @@ const registerValificationWithLink = async ({
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
   await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  cache.del(email);
   return {
     user,
     accessToken,
