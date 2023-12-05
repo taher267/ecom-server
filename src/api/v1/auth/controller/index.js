@@ -1,6 +1,6 @@
 const login = require("./login");
-// const register = require("./register");
-// const registerWithLink = require("./registerWithLink");
+const register = require("./register");
+const registerWithLink = require("./registerWithLink");
 // const registerValificationWithLink = require("./registerValificationWithLink");
 // const resendRegisterLink = require("./resendRegisterLink");
 // const updatePassword = require("./updatePassword");
@@ -10,8 +10,8 @@ const login = require("./login");
 
 module.exports = {
   login,
-  // register,
-  // registerWithLink,
+  register,
+  registerWithLink,
   // registerValificationWithLink,
   // resendRegisterLink,
   // updatePassword,

@@ -1,18 +1,26 @@
 const userService = require("../../../../service/auth");
-const {
-  badRequest,
-  customError,
-  notFound,
-} = require("../../../../utils/error");
 
-const resendRegisterLink = async (req, res) => {
+const resendRegisterLink = async (req, res, next) => {
   try {
-    res.json({ message: "Alhamdu lillah" });
+    const {
+      body: { name, email, password, username, phone_number },
+      headers: { origin },
+    } = req;
+    const url = `${origin}/register-confirmation`;
+    await userService.registerWithLink({
+      name,
+      email,
+      password,
+      username,
+      phone_number,
+      url,
+    });
+    res.status(201).json({
+      code: 201,
+      message: `Register link has been send on your provided email(${email})`,
+    });
   } catch (e) {
-    const status = e.status || 500;
-    const message = e.message;
-
-    res.status(status).json({ success: false, code: status, message });
+    next(e);
   }
 };
 

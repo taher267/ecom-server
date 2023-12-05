@@ -6,6 +6,7 @@ const { controllers: userControllers } = require("../api/v1/user");
 const v1 = `/api/v1`;
 // AUTH
 router.route(`${v1}/auth/login`).post(authControllers.login);
+router.route(`${v1}/auth/register`).post(authControllers.register);
 // User
 
 router
@@ -48,7 +49,7 @@ router
    * @method PATCH
    * @route base_url/api/v1/users
    */
-  .path(userControllers.updateItemPatch);
+  .patch(userControllers.updateItemPatch);
 router
   .route(`${v1}/users/:id/update-profile`)
   .patch(userControllers.profileChange);

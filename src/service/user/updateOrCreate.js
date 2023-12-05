@@ -90,8 +90,6 @@ const updateOrCreate = async ({
       user,
       code: 201,
     };
-
-    return { user: { ...user._doc, id: user.id }, code: 200 };
   } catch (e) {
     if (newUser) {
       await userRepo.deleteItemById({ id });

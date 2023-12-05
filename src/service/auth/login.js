@@ -1,6 +1,6 @@
 const { findItem } = require("../../repo/user");
 const { badRequest } = require("../../utils/error");
-// const { generateToken } = require("../token");
+const { generateToken } = require("../token");
 /**
  *
  * @param {email, password} param0

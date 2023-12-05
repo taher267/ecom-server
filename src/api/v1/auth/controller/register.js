@@ -1,22 +1,19 @@
-const { generateHash } = require("../../utils/hashing");
-const { findItem, createUser } = require("../../repo/user");
-const { badRequest } = require("../../utils/error");
-/**
- *
- * @param { name, email, password} param0
- * @returns user
- */
-const register = async ({ name, email, password }) => {
-  
-  const hasUser = await findItem({ qry: { email } });
-  if (hasUser) {
-    throw badRequest("User already exist");
+const authService = require("../../../../service/auth");
+
+const register = async (req, res, next) => {
+  try {
+    const { name, email, password, username, phone_number } = req.body;
+    const { ...rest } = await authService.register({
+      name,
+      email,
+      password,
+      username,
+      phone_number,
+    });
+    res.status(201).json(rest);
+  } catch (e) {
+    next(e);
   }
-
-  password = await generateHash(password);
-  const user = await createUser({ name, email, password });
-
-  return user;
 };
 
 module.exports = register;

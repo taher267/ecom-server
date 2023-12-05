@@ -1,4 +1,5 @@
 const userRepo = require("../../repo/user");
+const { notFound } = require("../../utils/error");
 const updateProperties = async (id, { status, roles }) => {
 
   const updateDate={

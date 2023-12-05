@@ -1,22 +1,61 @@
-const { generateHash } = require("../../utils/hashing");
-const { findItem, createUser } = require("../../repo/user");
+const hashing = require("../../utils/hashing");
+const token = require("../token");
+const userRepo = require("../../repo/user");
 const { badRequest } = require("../../utils/error");
 /**
  *
- * @param { name, email, password} param0
- * @returns user
+ * @param { name, email, password, username, phone_number } param0
+ * @returns {user, accessToken, refreshToken}
  */
-const register = async ({ name, email, password }) => {
-  
-  const hasUser = await findItem({ qry: { email } });
-  if (hasUser) {
-    throw badRequest("User already exist");
+const register = async ({ name, email, password, username, phone_number }) => {
+  if (!name || !email || !password) {
+    throw badRequest(`Invalid parameters!`);
+  }
+  // new user object
+  const newObj = {
+    name,
+    email,
+  };
+
+  const qry = [{ email }];
+
+  if (phone_number) {
+    qry.push({ phone_number });
+    newObj.phone_number = phone_number;
+  }
+  if (username) {
+    qry.push({ username });
+    newObj.username = username;
   }
 
-  password = await generateHash(password);
-  const user = await createUser({ name, email, password });
+  if (qry?.length) {
+    const existUser = await userRepo.findItem({ qry: { $or: qry } });
+    if (existUser) {
+      throw badRequest(`User Already exist!`);
+    }
+  }
+  newObj.password = await hashing.generateHash(password);
 
-  return user;
+  const user = await userRepo.create(newObj);
+  const { id } = user;
+  const common = { id, email };
+  const payload = {
+    ...common,
+    name,
+  };
+  const accessToken = token.generateToken({ payload });
+
+  const refreshToken = token.generateToken({
+    payload: common,
+    secret: process.env.REFRESH_TOKEN_SECRET,
+    expiresIn: "1y",
+  });
+  await userRepo.updateItemById({ id, updateDate: { refreshToken } });
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
 };
 
 module.exports = register;

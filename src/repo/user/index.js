@@ -77,6 +77,8 @@ const create = async ({ ...data }) => {
   const user = await User.create(data);
   const copy = { id: user.id, ...user._doc };
   delete copy._id;
+  delete copy.password;
+  delete copy.__v;
   return copy;
 };
 const count = ({ filter }) => {
