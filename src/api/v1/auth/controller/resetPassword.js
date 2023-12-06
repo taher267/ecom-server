@@ -1,18 +1,16 @@
 const userService = require("../../../../service/auth");
-const {
-  badRequest,
-  customError,
-  notFound,
-} = require("../../../../utils/error");
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res, next) => {
   try {
-    res.json({ message: "Alhamdu lillah" });
+    const { hashToken, newPassword, confirmPassword } = req.body;
+    await userService.resetPassword({
+      hashToken,
+      newPassword,
+      confirmPassword,
+    });
+    res.json({ message: "Alhamdu lillah, Password has been reset!" });
   } catch (e) {
-    const status = e.status || 500;
-    const message = e.message;
-
-    res.status(status).json({ success: false, code: status, message });
+    next(e);
   }
 };
 

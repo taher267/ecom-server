@@ -1,18 +1,18 @@
 const userService = require("../../../../service/auth");
-const {
-  badRequest,
-  customError,
-  notFound,
-} = require("../../../../utils/error");
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
   try {
-    res.json({ message: "Alhamdu lillah" });
-  } catch (e) {
-    const status = e.status || 500;
-    const message = e.message;
+    const {
+      body: { email },
+      headers: { origin },
+    } = req;
+    const url = `${origin}/forget-password`;
+    
+    await userService.forgetPassword({ email, url });
 
-    res.status(status).json({ success: false, code: status, message });
+    res.json({ message: "Successfully send email for Recovery account!" });
+  } catch (e) {
+    next(e);
   }
 };
 

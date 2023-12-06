@@ -1,4 +1,4 @@
-const { findItem } = require("../../repo/user");
+const userRepo = require("../../repo/user");
 const { badRequest } = require("../../utils/error");
 const { generateToken } = require("../token");
 /**
@@ -7,7 +7,7 @@ const { generateToken } = require("../token");
  * @returns {accessToken, refreshToken}
  */
 const login = async ({ email, password }) => {
-  const user = await findItem({
+  const user = await userRepo.findItem({
     qry: { email },
     select: "+password +refreshToken",
   });
@@ -33,11 +33,19 @@ const login = async ({ email, password }) => {
       secret: REFRESH_TOKEN_SECRET,
       expiresIn: "1y",
     });
+    await userRepo.updateItemById({
+      id: user.id,
+      updateDate: { refreshToken },
+    });
   } else if (true) {
   }
+  delete user.password;
+  delete user.refreshToken;
+
   return {
     accessToken,
     refreshToken,
+    user,
   };
 };
 

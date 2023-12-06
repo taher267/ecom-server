@@ -29,8 +29,13 @@ const findAllItems = async ({
   }));
 };
 
-const findItem = ({ qry = {}, select = "" }) => {
-  return User.findOne(qry).select(select).exec();
+const findItem = async ({ qry = {}, select = "" }) => {
+  const user = await User.findOne(qry).select(select).exec();
+  if (!user) return false;
+  const copy = { id: user.id, ...user._doc };
+  delete copy._id;
+  delete copy.__v;
+  return copy;
 };
 const findItemById = async ({ id, select = "" }) => {
   const user = await User.findById(id).select(select).exec();

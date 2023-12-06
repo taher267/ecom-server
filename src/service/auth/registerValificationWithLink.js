@@ -4,20 +4,32 @@ const { sendEmail } = require("../../utils");
 const { badRequest, serverError } = require("../../utils/error");
 const { generateHash } = require("../../utils/hashing");
 const verifyJwt = require("../../utils/verityJWT");
+const token = require("../token");
 const strToCryptoHash = require("./strToCryptoHash");
+
 const {
   REGISTER_LINK_SECRET,
   REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRY,
   SMTP_MAIL,
 } = process.env;
+// const email = "email@gmail.com";
 
-// const sign =
-//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImV4YW1wbGVAZG9tYWluLmNvbSIsImhhc2giOiIzYTM5YzZkYmQwMGJlMDA5OGM3Y2RmYzRiNjdmZTc0NWQyMDQxNmUxLmV4YW1wbGVAZG9tYWluLmNvbSIsImlhdCI6MTcwMTc5Nzg3NSwiZXhwIjoxNzAxNzk4Nzc1fQ.UJCwLYZYmYoLx0xVO9IXJKTgQh7ng9x_j_cwStSyb0M";
-// const registerToken =
-//   "344b511a75db2c66d462129a2fd54facde7a2854592b972f9a75e0e4f65d0a6b";
-//   const {decoded:{hash}}=verifyJwt({ secret: REGISTER_LINK_SECRET, token: sign })
-// console.log(strToCryptoHash({str:hash})===registerToken)
+// let count = 0;
+// const interval = () =>
+//   setInterval(() => {
+//     if (count === 5) {
+//       cache.del(email);
+//     }
+//     count++;
+
+//     console.log(cache.get(email));
+//   }, 2000);
+
+// setTimeout(() => {
+//   cache.set(email, email, 900);
+//   interval();
+// }, 3000);
 
 /**
  *
@@ -98,6 +110,7 @@ const registerValificationWithLink = async ({
   });
   await userRepo.updateItemById({ id, updateDate: { refreshToken } });
   cache.del(email);
+  // console.log(cache.get(email), cache.get(decoded.email));
   return {
     user,
     accessToken,

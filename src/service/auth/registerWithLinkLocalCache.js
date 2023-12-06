@@ -1,7 +1,7 @@
 const userRepo = require("../../repo/user");
 const crypto = require("crypto");
 const generateHashLink = require("./generateHashLink");
-const getRegisterLink = require("./getRegisterLink");
+const getRegisterLink = require("./getSignLink");
 const sendEmail = require("../../utils/sendEmail");
 const { accountVarificationTemplate } = require("../template");
 const { badRequest } = require("../../utils/error");

@@ -2,11 +2,11 @@ const login = require("./login");
 const register = require("./register");
 // const registerWithLink = require("./registerWithLink");
 const registerValificationWithLink = require("./registerValificationWithLink");
-const resendRegisterLink = require("./resendRegisterLink");
-const updatePassword = require("./updatePassword");
+// const resendRegisterLink = require("./resendRegisterLink");
+
 const forgetPassword = require("./forgotPassword");
 const resetPassword = require("./resetPassword");
-const setPassword = require("./setPassword");
+
 const registerWithLinkLocalCache = require("./registerWithLinkLocalCache");
 
 module.exports = {
@@ -14,10 +14,8 @@ module.exports = {
   register,
   // registerWithLink,
   registerValificationWithLink,
-  resendRegisterLink,
-  updatePassword,
+  // resendRegisterLink,
   forgetPassword,
   resetPassword,
-  setPassword,
   registerWithLinkLocalCache,
 };

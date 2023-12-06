@@ -5,16 +5,42 @@ const { controllers: userControllers } = require("../api/v1/user");
 
 const v1 = `/api/v1`;
 // AUTH
+/**
+ * @route baseurl/api/v1/auth/login
+ * @method POST
+ */
 router.route(`${v1}/auth/login`).post(authControllers.login);
+/**
+ * @route baseurl/api/v1/auth/register
+ * @method POST
+ */
 router.route(`${v1}/auth/register`).post(authControllers.register);
+/**
+ * @route baseurl/api/v1/auth/register-with-link
+ * @method POST
+ */
 router
   .route(`${v1}/auth/register-with-link`)
   .post(authControllers.registerWithLink);
+/**
+ * @route baseurl/api/v1/auth/register-link-varification
+ * @method POST
+ */
 router
   .route(`${v1}/auth/register-link-varification`)
   .post(authControllers.registerValificationWithLink);
-// User
+/**
+ * @route baseurl/api/v1/auth/forget-password
+ * @method POST
+ */
+router.route(`${v1}/auth/forget-password`).post(authControllers.forgetPassword);
+/**
+ * @route baseurl/api/v1/auth/reset-password
+ * @method POST
+ */
+router.route(`${v1}/auth/reset-password`).post(authControllers.resetPassword);
 
+// User
 router
   .route(`${v1}/users`)
   /**
@@ -59,7 +85,18 @@ router
 router
   .route(`${v1}/users/:id/update-profile`)
   .patch(userControllers.profileChange);
-
+/**
+ * @route baseurl/api/v1/users/set-password
+ * @method POST
+ */
+router.route(`${v1}/users/set-password`).post(userControllers.setPassword);
+/**
+ * @route baseurl/api/v1/users/update-password
+ * @method POST
+ */
+router
+  .route(`${v1}/users/update-password`)
+  .post(userControllers.updatePassword);
 // Product
 router
   .route(`${v1}/products`)

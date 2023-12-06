@@ -1,16 +1,18 @@
 const authService = require("../../../../service/auth");
+const { setAccessAndRefreshToken } = require("../urils");
 
 const register = async (req, res, next) => {
   try {
     const { name, email, password, username, phone_number } = req.body;
-    const { ...rest } = await authService.register({
+    const { user, accessToken, refreshToken } = await authService.register({
       name,
       email,
       password,
       username,
       phone_number,
     });
-    res.status(201).json(rest);
+    // setAccessAndRefreshToken(res, { setRefresh: true, refreshToken });
+    return res.status(201).json({ user, accessToken, refreshToken });
   } catch (e) {
     next(e);
   }
