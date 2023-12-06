@@ -8,7 +8,10 @@ const resetPassword = async (req, res, next) => {
       newPassword,
       confirmPassword,
     });
-    res.json({ message: "Alhamdu lillah, Password has been reset!" });
+    res.json({
+      message: "Alhamdu lillah, Password has been reset!",
+      code: 200,
+    });
   } catch (e) {
     next(e);
   }

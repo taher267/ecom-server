@@ -69,7 +69,6 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-
   "/auth/login":
     post:
       operationId: login
@@ -191,7 +190,69 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  "/auth/forget-password":
+    post:
+      operationId: forgetPassword
+      description: "Forget user password"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@domain.com
 
+              required:
+                - "email"
+      responses:
+        "200":
+          description: Forget password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Successfully send email for Recovery account!
+  "/auth/reset-password":
+    post:
+      operationId: ResetPassword
+      description: "Reset user password"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Hash"
+                - $ref: "#/components/schemas/ChangeCredential"
+              required: [hashToken, newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Reset password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
   "/users":
     post:
       operationId: createUser
@@ -448,6 +509,72 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+  "/users/set-password":
+    post:
+      security:
+        - bearerAuth: []
+      operationId: setPassword
+      description: "set user password"
+      tags:
+        - "User"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ChangeCredential"
+              required: [newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Set password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
+  "/users/update-password":
+    post:
+      security:
+        - bearerAuth: []
+      operationId: updatePassword
+      description: "Update user password"
+      tags:
+        - "User"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/ChangeCredential"
+              properties:
+                oldPassword:
+                  type: string
+                  example: example123
+              required: [oldPassword, newPassword, confirmPassword]
+
+      responses:
+        "200":
+          description: Set password response!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been updated!
+
   "/products":
     post:
       operationId: createProduct
@@ -723,7 +850,15 @@ components:
       properties:
         hashToken:
           type: string
-          example: jfksajfkajffkajfkajfkasjfksjfksajfksdjafksajfksajfkdsajfkdsj
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkZDQ1MGFlZjEwMjY4MDkxMTM5MjVmNzJiMWJhNGI1YjI5ODFiZTc2NjBmOTdiOWQ5NTJmZWQzNWM1NzQwNmIiLCJpYXQiOjE3MDE4ODQ4MDIsImV4cCI6MTcwMTg4NTcwMn0.G1kD_YfiIaZO7CjV7uRoFUNsAYEhlLnFni2aNB3mm_I
+    ChangeCredential:
+      properties:
+        newPassword:
+          type: string
+          example: example123
+        confirmPassword:
+          type: string
+          example: example123
     UserRequest:
       allOf:
         - $ref: "#components/schemas/User"

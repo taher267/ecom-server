@@ -6,15 +6,17 @@ const { controllers: userControllers } = require("../api/v1/user");
 const v1 = `/api/v1`;
 // AUTH
 /**
- * @route baseurl/api/v1/auth/login
- * @method POST
- */
-router.route(`${v1}/auth/login`).post(authControllers.login);
-/**
  * @route baseurl/api/v1/auth/register
  * @method POST
  */
 router.route(`${v1}/auth/register`).post(authControllers.register);
+
+/**
+ * @route baseurl/api/v1/auth/login
+ * @method POST
+ */
+router.route(`${v1}/auth/login`).post(authControllers.login);
+
 /**
  * @route baseurl/api/v1/auth/register-with-link
  * @method POST
@@ -29,11 +31,13 @@ router
 router
   .route(`${v1}/auth/register-link-varification`)
   .post(authControllers.registerValificationWithLink);
+
 /**
  * @route baseurl/api/v1/auth/forget-password
  * @method POST
  */
 router.route(`${v1}/auth/forget-password`).post(authControllers.forgetPassword);
+
 /**
  * @route baseurl/api/v1/auth/reset-password
  * @method POST

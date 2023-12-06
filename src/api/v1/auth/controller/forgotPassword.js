@@ -7,10 +7,13 @@ const forgotPassword = async (req, res, next) => {
       headers: { origin },
     } = req;
     const url = `${origin}/forget-password`;
-    
+
     await userService.forgetPassword({ email, url });
 
-    res.json({ message: "Successfully send email for Recovery account!" });
+    res.json({
+      message: "Successfully send email for Recovery account!",
+      code: 200,
+    });
   } catch (e) {
     next(e);
   }

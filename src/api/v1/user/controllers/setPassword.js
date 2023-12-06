@@ -11,7 +11,7 @@ const setPassword = async (req, res, next) => {
       confirmPassword,
       id,
     });
-    res.json({ message: "Alhamdu lillah, Password has been set!" });
+    res.json({ message: "Alhamdu lillah, Password has been set!", code: 200 });
   } catch (e) {
     next(e);
   }
