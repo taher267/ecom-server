@@ -3,11 +3,13 @@ const register = require("./register");
 // const registerWithLink = require("./registerWithLink");
 const registerValificationWithLink = require("./registerValificationWithLink");
 // const resendRegisterLink = require("./resendRegisterLink");
-
 const forgetPassword = require("./forgotPassword");
 const resetPassword = require("./resetPassword");
-
 const registerWithLinkLocalCache = require("./registerWithLinkLocalCache");
+const getAccessTokenByRefreshToken = require("./refreshTokenToAccessToken");
+const loginOrRegisterWithGoogle = require("./loginOrRegisterWithGoogle");
+const loginWithGoogle = require("./loginWithGoogle");
+const registerWithGoogle = require("./registerWithGoogle");
 
 module.exports = {
   login,
@@ -18,4 +20,8 @@ module.exports = {
   forgetPassword,
   resetPassword,
   registerWithLinkLocalCache,
+  getAccessTokenByRefreshToken,
+  loginOrRegisterWithGoogle,
+  loginWithGoogle,
+  registerWithGoogle,
 };

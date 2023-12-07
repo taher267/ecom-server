@@ -73,3 +73,11 @@
   - index.js
 - .env
 - package.json
+
+### Login or Register with google
+
+1. for tokenObj .env GOOGLE_REDIRECT_URI_LOCAL= GOOGLE_REDIRECT_URI_LIVE= GOOGLE_CLIENT_ID= GOOGLE_CLIENT_SECRET= and install axios
+
+2. (src/api/v1/controllers/loginOrRegisterWithGoogle.js) (src/service/auth/loginOrRegisterWithGoogle.js)
+
+3. User.js (model) thirdPartyAuth="google"

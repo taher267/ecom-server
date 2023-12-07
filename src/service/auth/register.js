@@ -1,13 +1,17 @@
 const hashing = require("../../utils/hashing");
 const token = require("../token");
 const userRepo = require("../../repo/user");
-const { badRequest } = require("../../utils/error");
+const { badRequest, serverError } = require("../../utils/error");
+const { REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } = process.env;
 /**
  *
  * @param { name, email, password, username, phone_number } param0
  * @returns {user, accessToken, refreshToken}
  */
 const register = async ({ name, email, password, username, phone_number }) => {
+  if (!REFRESH_TOKEN_SECRET || !REFRESH_TOKEN_EXPIRY) {
+    throw serverError();
+  }
   if (!name || !email || !password) {
     throw badRequest(`Invalid parameters!`);
   }
@@ -47,8 +51,8 @@ const register = async ({ name, email, password, username, phone_number }) => {
 
   const refreshToken = token.generateToken({
     payload: common,
-    secret: process.env.REFRESH_TOKEN_SECRET,
-    expiresIn: "1y",
+    secret: REFRESH_TOKEN_SECRET,
+    expiresIn: REFRESH_TOKEN_EXPIRY,
   });
   await userRepo.updateItemById({ id, updateDate: { refreshToken } });
   return {

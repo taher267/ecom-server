@@ -1,18 +1,25 @@
-const userService = require("../../../../service/auth");
-const {
-  badRequest,
-  customError,
-  notFound,
-} = require("../../../../utils/error");
+const authService = require("../../../../service/auth");
+const { setAccessAndRefreshToken } = require("../urils");
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
-    res.json({ message: "Alhamdu lillah" });
-  } catch (e) {
-    const status = e.status || 500;
-    const message = e.message;
+    const { username, password } = req.body;
+    const { accessToken, refreshToken, user } = await authService.login({
+      username,
+      password,
+    });
+    setAccessAndRefreshToken(res, { setRefresh: true, refreshToken });
 
-    res.status(status).json({ success: false, code: status, message });
+    res.status(200).json({
+      message: "Alhamdu lillah, User login",
+      code: 200,
+      data: {
+        user,
+        accessToken,
+      },
+    });
+  } catch (e) {
+    next(e);
   }
 };
 

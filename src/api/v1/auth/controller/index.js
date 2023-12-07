@@ -5,6 +5,10 @@ const registerValificationWithLink = require("./registerValificationWithLink");
 // const resendRegisterLink = require("./resendRegisterLink");
 const forgetPassword = require("./forgotPassword");
 const resetPassword = require("./resetPassword");
+const getAccessTokenByRefreshToken = require("./refreshTokenToAccessToken");
+const loginOrRegisterWithGoogle = require("./loginOrRegisterWithGoogle");
+const loginWithGoogle = require("./loginWithGoogle");
+const registerWithGoogle = require("./registerWithGoogle");
 
 module.exports = {
   login,
@@ -14,4 +18,8 @@ module.exports = {
   // resendRegisterLink,
   forgetPassword,
   resetPassword,
+  getAccessTokenByRefreshToken,
+  loginOrRegisterWithGoogle,
+  loginWithGoogle,
+  registerWithGoogle,
 };

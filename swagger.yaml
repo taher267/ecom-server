@@ -253,6 +253,54 @@ paths:
                   message:
                     type: string
                     example: Password has been reset!
+  "/auth/refresh":
+    get:
+      operationId: newAccessToken
+      description: "Generate access token form refress token!"
+      tags:
+        - "Auth"
+      responses:
+        "200":
+          description: Getting a new access token!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Password has been reset!
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkZDQ1MGFlZjEwMjY4MDkxMTM5MjVmNzJiMWJhNGI1YjI5ODFiZTc2NjBmOTdiOWQ5NTJmZWQzNWM1NzQwNmIiLCJpYXQiOjE3MDE4ODQ4MDIsImV4cCI6MTcwMTg4NTcwMn0.G1kD_YfiIaZO7CjV7uRoFUNsAYEhlLnFni2aNB3mm_I
+  "/auth/logout":
+    get:
+      operationId: Logout
+      description: "Logout the user"
+      tags:
+        - "Auth"
+      responses:
+        "202":
+          description: Clearing access token and refresh token for logout!
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 202
+                  message:
+                    type: string
+                    example: Password has been reset!
   "/users":
     post:
       operationId: createUser

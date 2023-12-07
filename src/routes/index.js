@@ -4,12 +4,39 @@ const { controllers: productControllers } = require("../api/v1/product");
 const { controllers: userControllers } = require("../api/v1/user");
 
 const v1 = `/api/v1`;
-// AUTH
+
+/*=============================================
+=            Auth            =
+=============================================*/
+
 /**
  * @route baseurl/api/v1/auth/register
  * @method POST
  */
 router.route(`${v1}/auth/register`).post(authControllers.register);
+/**
+ * @route baseurl/api/v1/auth/login-or-register-with-google
+ * @method GET
+ */
+router
+  .route(`${v1}/auth/login-or-register-with-google`)
+  .post(authControllers.loginOrRegisterWithGoogle);
+
+/**
+ * @route baseurl/api/v1/auth/register-with-google
+ * @method GET
+ */
+router
+  .route(`${v1}/auth/register-with-google`)
+  .post(authControllers.registerWithGoogle);
+
+/**
+ * @route baseurl/api/v1/auth/register-with-google
+ * @method GET
+ */
+router
+  .route(`${v1}/auth/loging-with-google`)
+  .post(authControllers.loginWithGoogle);
 
 /**
  * @route baseurl/api/v1/auth/login
@@ -43,8 +70,27 @@ router.route(`${v1}/auth/forget-password`).post(authControllers.forgetPassword);
  * @method POST
  */
 router.route(`${v1}/auth/reset-password`).post(authControllers.resetPassword);
+/**
+ * @route baseurl/api/v1/auth/refresh
+ * @method POST
+ */
+router
+  .route(`${v1}/auth/refresh`)
+  .get(authControllers.getAccessTokenByRefreshToken);
+/**
+ * @route baseurl/api/v1/auth/logout
+ * @method DELETE
+ */
+router
+  .route(`${v1}/auth/logout`)
+  .delete(authControllers.getAccessTokenByRefreshToken);
 
-// User
+/*=====  End of Auth  ======*/
+
+/*=============================================
+=            User            =
+=============================================*/
+
 router
   .route(`${v1}/users`)
   /**
@@ -71,21 +117,22 @@ router
   /**
    * Private Route
    * @method DELETE
-   * @route base_url/api/v1/users
+   * @route base_url/api/v1/users/:id
    */
   .delete(userControllers.removeItem)
   /**
    * Private Route with ADMIN
    * @method PUT
-   * @route base_url/api/v1/users
+   * @route base_url/api/v1/users/:id
    */
   .put(userControllers.updateItem)
   /**
    * Private Route
    * @method PATCH
-   * @route base_url/api/v1/users
+   * @route base_url/api/v1/users/:id
    */
   .patch(userControllers.updateItemPatch);
+
 router
   .route(`${v1}/users/:id/update-profile`)
   .patch(userControllers.profileChange);
@@ -101,10 +148,16 @@ router.route(`${v1}/users/set-password`).post(userControllers.setPassword);
 router
   .route(`${v1}/users/update-password`)
   .post(userControllers.updatePassword);
-// Product
+/*=====  End of Uer  ======*/
+/*=============================================
+=            Product            =
+=============================================*/
+
 router
   .route(`${v1}/products`)
   .post(productControllers.create)
   .get(productControllers.findAllItems);
 
 module.exports = router;
+
+/*=====  End of Product  ======*/

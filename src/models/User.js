@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const userConfig = require("../config/user");
 
 const userSchema = new Schema(
   {
@@ -24,7 +25,12 @@ const userSchema = new Schema(
       required: [false, "Password is mandatory"],
       select: false,
     },
-
+    thirdPartyAuth: {
+      type: String,
+    },
+    profilePic: {
+      type: String,
+    },
     // passwordAllow: {
     //   type: String,
     //   required: [false, "allow password is mandatory"],
@@ -35,7 +41,7 @@ const userSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["active", "inactive", "pending"],
+      enum: userConfig.statuses,
     },
     refreshToken: [
       {

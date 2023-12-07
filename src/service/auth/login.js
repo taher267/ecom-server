@@ -1,18 +1,40 @@
 const userRepo = require("../../repo/user");
-const { badRequest } = require("../../utils/error");
+const { badRequest, notFound } = require("../../utils/error");
+const { hashMatched } = require("../../utils/hashing");
 const { generateToken } = require("../token");
+const { REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } = process.env;
 /**
  *
  * @param {email, password} param0
  * @returns {accessToken, refreshToken}
  */
-const login = async ({ email, password }) => {
+const login = async ({ username, password }) => {
+  if (!username || !password) {
+    throw badRequest(`Invalid parameters!`);
+  }
+  const qry = {};
+
+  if (username.includes("@")) {
+    qry.email = username;
+  } else if (username.includes("+") || !isNaN(parseInt(username))) {
+    qry.phone_number = username;
+  } else {
+    qry.username = username;
+  }
   const user = await userRepo.findItem({
-    qry: { email },
-    select: "+password +refreshToken",
+    qry,
+    select: "+password +refreshToken status",
   });
+
   if (!user) {
-    throw badRequest("Invalid Credentials");
+    throw notFound("User doesn't exist!");
+  }
+  if (user.status === "pending") {
+    throw badRequest(`Please verify your account!`);
+  } else if (user.status === "inactive") {
+    throw badRequest(
+      `Your are not eligible to login, please contact with support!`
+    );
   }
 
   const matched = await hashMatched(password, user.password);
@@ -31,13 +53,12 @@ const login = async ({ email, password }) => {
     refreshToken = generateToken({
       payload: common,
       secret: REFRESH_TOKEN_SECRET,
-      expiresIn: "1y",
+      expiresIn: REFRESH_TOKEN_EXPIRY,
     });
     await userRepo.updateItemById({
       id: user.id,
       updateDate: { refreshToken },
     });
-  } else if (true) {
   }
   delete user.password;
   delete user.refreshToken;
