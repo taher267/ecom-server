@@ -16,7 +16,7 @@ const v1 = `/api/v1`;
 router.route(`${v1}/auth/register`).post(authControllers.register);
 /**
  * @route baseurl/api/v1/auth/login-or-register-with-google
- * @method GET
+ * @method POST
  */
 router
   .route(`${v1}/auth/login-or-register-with-google`)
@@ -24,7 +24,7 @@ router
 
 /**
  * @route baseurl/api/v1/auth/register-with-google
- * @method GET
+ * @method POST
  */
 router
   .route(`${v1}/auth/register-with-google`)
@@ -32,7 +32,7 @@ router
 
 /**
  * @route baseurl/api/v1/auth/register-with-google
- * @method GET
+ * @method POST
  */
 router
   .route(`${v1}/auth/loging-with-google`)

@@ -69,6 +69,171 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  "/auth/login-or-register-with-google":
+    post:
+      operationId: register
+      description: "Register or login of user for both"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully register with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        "200":
+          description: Login successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully Login with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/register-with-google":
+    post:
+      operationId: register
+      description: "Register with google"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "201":
+          description: Signup successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully register with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+  "/auth/login-with-google":
+    post:
+      operationId: register
+      description: "Login of user with google"
+      tags:
+        - "Auth"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                access_token:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+              required:
+                - "id_token"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Successfully Login with google
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                        $ref: "#/components/schemas/User"
+                      access_token:
+                        type: string
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/auth/login":
     post:
       operationId: login

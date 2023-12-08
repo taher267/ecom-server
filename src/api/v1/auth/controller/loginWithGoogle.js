@@ -2,8 +2,8 @@ const authService = require("../../../../service/auth");
 
 const loginWithGoogle = async (req, res, next) => {
   try {
-    const { query } = req;
-    const { id_token, access_token } = query;
+    // const { query } = req;
+    const { id_token, access_token } = body;
     const { user, accessToken, refreshToken } =
       await authService.loginWithGoogle.IdToenVerify({
         id_token,
