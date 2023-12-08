@@ -133,9 +133,22 @@ router
    */
   .patch(userControllers.updateItemPatch);
 
+/**
+ * @route baseurl/api/v1/users/:id/update-profile
+ * @method POST
+ */
 router
   .route(`${v1}/users/:id/update-profile`)
   .patch(userControllers.profileChange);
+
+/**
+ * @route baseurl/api/v1/users/:id/change-profile-pic
+ * @method PATCH
+ */
+router
+  .route(`${v1}/users/:id/change-profile-pic`)
+  .patch(userControllers.changeProfilePic);
+
 /**
  * @route baseurl/api/v1/users/set-password
  * @method POST

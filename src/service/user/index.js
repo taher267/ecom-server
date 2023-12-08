@@ -7,6 +7,7 @@ const removeItem = require("./removeItem");
 const updateOrCreate = require("./updateOrCreate");
 const setPassword = require("./setPassword");
 const updatePassword = require("./updatePassword");
+const changeProfilePic = require("./changeProfilePic");
 
 module.exports = {
   createItem,
@@ -18,4 +19,5 @@ module.exports = {
   profileChange,
   setPassword,
   updatePassword,
+  changeProfilePic,
 };

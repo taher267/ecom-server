@@ -12,6 +12,8 @@ servers:
     url: "http://localhost:4001/api/v1"
   - description: Live
     url: "https://ecom-server-rw2s.onrender.com/api/v1"
+  - description: Ngrok Dynamic
+    url: "https://154c-103-96-104-74.ngrok-free.app/api/v1"
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
@@ -69,6 +71,7 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/auth/login-or-register-with-google":
     post:
       operationId: register
@@ -277,6 +280,7 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/auth/register-with-link":
     post:
       operationId: registerWithLink
@@ -315,6 +319,7 @@ paths:
                   message:
                     type: string
                     example: Register link has been sent on your provided email!
+
   "/auth/register-link-varification":
     post:
       operationId: accountVarification
@@ -355,6 +360,7 @@ paths:
                       access_token:
                         type: string
                         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
   "/auth/forget-password":
     post:
       operationId: forgetPassword
@@ -388,6 +394,7 @@ paths:
                   message:
                     type: string
                     example: Successfully send email for Recovery account!
+
   "/auth/reset-password":
     post:
       operationId: ResetPassword
@@ -418,6 +425,7 @@ paths:
                   message:
                     type: string
                     example: Password has been reset!
+
   "/auth/refresh":
     get:
       operationId: newAccessToken
@@ -445,6 +453,7 @@ paths:
                       accessToken:
                         type: string
                         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhkZDQ1MGFlZjEwMjY4MDkxMTM5MjVmNzJiMWJhNGI1YjI5ODFiZTc2NjBmOTdiOWQ5NTJmZWQzNWM1NzQwNmIiLCJpYXQiOjE3MDE4ODQ4MDIsImV4cCI6MTcwMTg4NTcwMn0.G1kD_YfiIaZO7CjV7uRoFUNsAYEhlLnFni2aNB3mm_I
+
   "/auth/logout":
     get:
       operationId: Logout
@@ -466,6 +475,7 @@ paths:
                   message:
                     type: string
                     example: Password has been reset!
+
   "/users":
     post:
       operationId: createUser
@@ -562,6 +572,7 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+
   "/users/{id}":
     get:
       operationId: getUser
@@ -722,6 +733,37 @@ paths:
           $ref: "#/components/responses/400"
         "500":
           "$ref": "#/components/responses/500"
+
+  "/users/{id}/change-profile-pic":
+    patch:
+      operationId: changeProfilePic
+      security:
+        - bearerAuth: []
+      description: Retrieve single user
+      tags:
+        - "User"
+      parameters:
+        - $ref: "#/components/parameters/idPathParam"
+        # summary: Upload a file
+      requestBody:
+        content:
+          multipart/form-data:
+            # 'image/png':
+              schema:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+                    # pattern: '\.(jpg|jpeg|png|gif)$'
+                required:
+                  - "file"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+
   "/users/set-password":
     post:
       security:
@@ -752,6 +794,7 @@ paths:
                   message:
                     type: string
                     example: Password has been reset!
+
   "/users/update-password":
     post:
       security:
@@ -860,6 +903,7 @@ paths:
                       $ref: "#components/schemas/Product"
         "500":
           "$ref": "#/components/responses/500"
+
   "/category":
     post:
       operationId: createCategory
@@ -929,6 +973,7 @@ paths:
                       $ref: "#components/schemas/SubCategory"
         "500":
           "$ref": "#/components/responses/500"
+
   "/sub-category":
     post:
       operationId: createSubCategory
@@ -1000,6 +1045,7 @@ paths:
 
         "500":
           "$ref": "#/components/responses/500"
+
 components:
   securitySchemes:
     bearerAuth:
