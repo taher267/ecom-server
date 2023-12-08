@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { controllers: authControllers } = require("../api/v1/auth");
-const { controllers: productControllers } = require("../api/v1/product");
 const { controllers: userControllers } = require("../api/v1/user");
 const authenticate = require("../middleware/authenticate");
 const authorize = require("../middleware/authorize");
@@ -131,7 +130,11 @@ router
    * @method PATCH
    * @route base_url/api/v1/users/:id
    */
-  .patch(authenticate, authorize(['super_admin']), userControllers.updateItemPatch);
+  .patch(
+    authenticate,
+    authorize(["super_admin"]),
+    userControllers.updateItemPatch
+  );
 
 /**
  * Private Route
@@ -169,14 +172,9 @@ router
   .post(authenticate, userControllers.updatePassword);
 /*=====  End of Uer  ======*/
 /*=============================================
-=            Product            =
+=                        =
 =============================================*/
 
-router
-  .route(`${v1}/products`)
-  .post(productControllers.create)
-  .get(productControllers.findAllItems);
+/*=====  End of   ======*/
 
 module.exports = router;
-
-/*=====  End of Product  ======*/
