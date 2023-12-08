@@ -127,11 +127,11 @@ router
    */
   .put(authenticate, authorize(), userControllers.updateItem)
   /**
-   * Private Route
+   * Private Route By admin
    * @method PATCH
    * @route base_url/api/v1/users/:id
    */
-  .patch(authenticate, userControllers.updateItemPatch);
+  .patch(authenticate, authorize(['super_admin']), userControllers.updateItemPatch);
 
 /**
  * Private Route
