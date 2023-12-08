@@ -1,4 +1,4 @@
-const { serverError } = require("../../utils/error");
+const { serverError, badRequest } = require("../../utils/error");
 const jwt = require("jsonwebtoken");
 const { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY } = process.env;
 const generateToken = ({
@@ -32,11 +32,19 @@ const verifyToken = ({
   algorithm = "HS256",
   secret = ACCESS_TOKEN_SECRET,
 }) => {
+  if (!secret) {
+    throw serverError();
+  }
   try {
     return jwt.verify(token, secret, { algorithms: [algorithm] });
   } catch (e) {
     console.log("[JWT]", e);
-    throw serverError();
+    const errMsg = e.message;
+    let msg = errMsg;
+    if (errMsg === "invalid signature" || errMsg === "jwt malformed") {
+      msg = "Invalid auth token";
+    }
+    throw badRequest(msg);
   }
 };
 

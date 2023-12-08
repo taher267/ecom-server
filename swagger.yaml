@@ -13,7 +13,7 @@ servers:
   - description: Live
     url: "https://ecom-server-rw2s.onrender.com/api/v1"
   - description: Ngrok Dynamic
-    url: "https://154c-103-96-104-74.ngrok-free.app/api/v1"
+    url: "https://a3e2-103-96-104-72.ngrok-free.app/api/v1"
 tags:
   - name: Auth
     description: Authentication Endpoints (public)
@@ -749,15 +749,15 @@ paths:
         content:
           multipart/form-data:
             # 'image/png':
-              schema:
-                type: object
-                properties:
-                  file:
-                    type: string
-                    format: binary
-                    # pattern: '\.(jpg|jpeg|png|gif)$'
-                required:
-                  - "file"
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  # pattern: '\.(jpg|jpeg|png|gif)$'
+              required:
+                - "file"
       responses:
         "200":
           description: OK

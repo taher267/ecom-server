@@ -1,5 +1,6 @@
 const statuses = ["active", "inactive", "pending"];
-const roles = ["super_admin", "admin", "user"];
+const authorize_roles = ["super_admin", "admin"];
+const roles = [...authorize_roles, "user"];
 const profilePicExtensions = [".jpg", ".jpeg", ".png", ".git"];
 
-module.exports = { statuses, roles, profilePicExtensions };
+module.exports = { statuses, roles, profilePicExtensions, authorize_roles };

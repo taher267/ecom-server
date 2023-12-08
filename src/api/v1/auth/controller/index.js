@@ -9,6 +9,7 @@ const getAccessTokenByRefreshToken = require("./refreshTokenToAccessToken");
 const loginOrRegisterWithGoogle = require("./loginOrRegisterWithGoogle");
 const loginWithGoogle = require("./loginWithGoogle");
 const registerWithGoogle = require("./registerWithGoogle");
+const logout = require("./logout");
 
 module.exports = {
   login,
@@ -22,4 +23,5 @@ module.exports = {
   loginOrRegisterWithGoogle,
   loginWithGoogle,
   registerWithGoogle,
+  logout
 };

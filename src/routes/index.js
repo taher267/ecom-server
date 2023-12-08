@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { controllers: authControllers } = require("../api/v1/auth");
 const { controllers: productControllers } = require("../api/v1/product");
 const { controllers: userControllers } = require("../api/v1/user");
+const authenticate = require("../middleware/authenticate");
+const authorize = require("../middleware/authorize");
 
 const v1 = `/api/v1`;
 
@@ -81,9 +83,7 @@ router
  * @route baseurl/api/v1/auth/logout
  * @method DELETE
  */
-router
-  .route(`${v1}/auth/logout`)
-  .delete(authControllers.getAccessTokenByRefreshToken);
+router.route(`${v1}/auth/logout`).delete(authControllers.logout);
 
 /*=====  End of Auth  ======*/
 
@@ -98,13 +98,13 @@ router
    * @method POST
    * @route base_url/api/v1/users
    */
-  .post(userControllers.create)
+  .post(authenticate, authorize(), userControllers.create)
   /**
-   * Private Route With Admin
+   * Private Route With ADMIN
    * @method GET
    * @route base_url/api/v1/users
    */
-  .get(userControllers.findAllItems);
+  .get(authenticate, authorize(), userControllers.findAllItems);
 
 router
   .route(`${v1}/users/:id`)
@@ -113,54 +113,60 @@ router
    * @method GET
    * @route base_url/api/v1/users/:id
    */
-  .get(userControllers.findSingleItem)
+  .get(authenticate, authorize(), userControllers.findSingleItem)
   /**
    * Private Route
    * @method DELETE
    * @route base_url/api/v1/users/:id
    */
-  .delete(userControllers.removeItem)
+  .delete(authenticate, authorize(), userControllers.removeItem)
   /**
    * Private Route with ADMIN
    * @method PUT
    * @route base_url/api/v1/users/:id
    */
-  .put(userControllers.updateItem)
+  .put(authenticate, authorize(), userControllers.updateItem)
   /**
    * Private Route
    * @method PATCH
    * @route base_url/api/v1/users/:id
    */
-  .patch(userControllers.updateItemPatch);
+  .patch(authenticate, userControllers.updateItemPatch);
 
 /**
+ * Private Route
  * @route baseurl/api/v1/users/:id/update-profile
  * @method POST
  */
 router
   .route(`${v1}/users/:id/update-profile`)
-  .patch(userControllers.profileChange);
+  .patch(authenticate, userControllers.profileChange);
 
 /**
+ * Private Route
  * @route baseurl/api/v1/users/:id/change-profile-pic
  * @method PATCH
  */
 router
   .route(`${v1}/users/:id/change-profile-pic`)
-  .patch(userControllers.changeProfilePic);
+  .patch(authenticate, userControllers.changeProfilePic);
 
 /**
+ * Private Route
  * @route baseurl/api/v1/users/set-password
  * @method POST
  */
-router.route(`${v1}/users/set-password`).post(userControllers.setPassword);
+router
+  .route(`${v1}/users/set-password`)
+  .post(authenticate, userControllers.setPassword);
 /**
+ * Private Route
  * @route baseurl/api/v1/users/update-password
  * @method POST
  */
 router
   .route(`${v1}/users/update-password`)
-  .post(userControllers.updatePassword);
+  .post(authenticate, userControllers.updatePassword);
 /*=====  End of Uer  ======*/
 /*=============================================
 =            Product            =

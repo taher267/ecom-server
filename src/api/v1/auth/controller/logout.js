@@ -1,4 +1,5 @@
 const { NODE_ENV } = process.env;
+
 const logout = async (req, res, next) => {
   try {
     const { cookies } = req;
@@ -18,3 +19,5 @@ const logout = async (req, res, next) => {
     next(e);
   }
 };
+
+module.exports = logout;
